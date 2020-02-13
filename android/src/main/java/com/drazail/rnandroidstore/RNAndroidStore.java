@@ -8,8 +8,8 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Callback;
 
-import java.io.Console;
 import java.io.File;
+
 
 import android.content.ContentResolver;
 import android.database.Cursor;
@@ -61,6 +61,7 @@ public class RNAndroidStore extends ReactContextBaseJavaModule {
     private int songsPerIteration = 0;
     private int version = Build.VERSION.SDK_INT;
 
+    private String geniusKey = "";
     public RNAndroidStore(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
@@ -70,6 +71,14 @@ public class RNAndroidStore extends ReactContextBaseJavaModule {
     public String getName() {
         return "RNAndroidStore";
     }
+//    @ReactMethod
+//    public void getLyricsSong(ReadableMap options){
+//            switch (options.hasKey('geniusKey')){
+//                options.getString('geniusKey');
+//            }
+//
+//
+//    }
 
     @ReactMethod
     public void getSongByPath(ReadableMap options, final Callback successCallback, final Callback errorCallback) {
@@ -151,7 +160,7 @@ public class RNAndroidStore extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void getAlbums(ReadableMap options, final Callback successCallback, final Callback errorCallback) {
-
+        String sortOrder = MediaStore.Audio.Albums.ALBUM + " ASC";
         WritableArray jsonArray = new WritableNativeArray();
 
         if (options.hasKey("artist")) {
@@ -161,7 +170,7 @@ public class RNAndroidStore extends ReactContextBaseJavaModule {
             String searchParam = "%" + options.getString("artist") + "%";
             Cursor cursor = getCurrentActivity().getContentResolver().query(
                     MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI, projection,
-                    MediaStore.Audio.Albums.ARTIST + " Like ?", new String[] { searchParam }, null);
+                    MediaStore.Audio.Albums.ARTIST + " Like ?", new String[] { searchParam }, sortOrder);
             if (cursor != null && cursor.getCount() > 0) {
                 cursor.moveToFirst();
                 do {
@@ -186,7 +195,7 @@ public class RNAndroidStore extends ReactContextBaseJavaModule {
                     MediaStore.Audio.Albums.NUMBER_OF_SONGS };
 
             Cursor cursor = getCurrentActivity().getContentResolver()
-                    .query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI, projection, null, null, null);
+                    .query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI, projection, null, null,sortOrder);
             if (cursor != null && cursor.getCount() > 0) {
                 cursor.moveToFirst();
                 do {
