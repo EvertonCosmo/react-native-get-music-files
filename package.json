@@ -17,6 +17,7 @@
   ],
   "license": "IST",
   "name": "react-native-get-music-files",
+  "homepage": "https://github.com/YajanaRao/react-native-get-music-files#readme",
   "react-native": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
